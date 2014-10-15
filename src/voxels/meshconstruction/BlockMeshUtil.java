@@ -1,7 +1,10 @@
 package voxels.meshconstruction;
 
+import java.util.Arrays;
+
 import voxels.map.Coord3;
 
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 
 public class BlockMeshUtil {
@@ -13,10 +16,27 @@ public class BlockMeshUtil {
     public static void AddFaceMeshData(Coord3 pos, MeshSet mset, int direction, int triIndexStart)
     {
         FaceVertices(mset, pos, direction);
-        UVsForDirection(mset, direction);
-        IndicesForDirection(mset, triIndexStart);
+//        UVsForDirection(mset, direction);
+//        IndicesForDirection(mset, triIndexStart);
     }
-    
+    private static void UVsForDirection(MeshSet mset, int dir) {
+//      mset.uvs.addAll(uvs); // DELETE THIS!
+      /*
+       * CHANGE THE X AND Y OF OFFSETSTART. X AND Y CAN EACH BE 0f, .25f, .5f, or .75f 
+       * TRY ANY OF THE 16 COMBINATIONS: (.25f, .25f) for stone, (0f, .75f) for side grass
+       * LOOK AT THE TEXTURE "dog_64d_.jpg" TO SEE THAT YOUR CHOICE CORRESPONDS TO THE 
+       * TILE OFFSET INDICATED BY X AND Y. YOU MUST EDIT THE FRAGMENT SHADER, AS DESCRIBED HERE:
+       * http://voxel.matthewpoindexter.com/class/block-faces-part-2-1-fixing-the-annoyingly-mis-aligned-texture/
+       * FOR THIS TO WORK (WELL). 
+       */
+      Vector2f offsetStart = new Vector2f(0f,0f);
+      mset.uvs.addAll(Arrays.asList(
+              offsetStart ,
+              new Vector2f(offsetStart.x, offsetStart.y +.25f),
+              new Vector2f(offsetStart.x + .25f, offsetStart.y + .25f),
+                              new Vector2f(offsetStart.x + .25f, offsetStart.y)
+              ));
+  }
 
     public static Vector3f[][] faceVertices = new Vector3f[][] {
         //Xneg

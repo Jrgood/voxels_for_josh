@@ -21,7 +21,7 @@ import com.jme3.scene.shape.Cylinder;
 import com.jme3.util.BufferUtils;
 
 /**
- * Created by didyouloseyourdog on 8/10/14.
+ * Created by josh on 8/10/14.
  */
 public class VoxelWorld extends SimpleApplication
 {
