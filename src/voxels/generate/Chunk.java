@@ -12,7 +12,7 @@ import voxels.map.Coord3;
 	    public final static int XLENGTH = 16;
 	    public final static int YLENGTH = 16;
 	    public final static int ZLENGTH = 16;
-	    
+	    //Test change
 	    /*
 	     * Chunk Position Methods
 	     * Chunk Positions are always the same as 
