@@ -4,7 +4,9 @@ import com.jme3.math.Vector3f;
 
 public class Coord3 {
 	
-	private int x, y, z;
+	public int x;
+	public int y;
+	public int z;
 	
 	public Coord3(int xx, int yy, int zz) {
 		  x = xx;
@@ -14,6 +16,7 @@ public class Coord3 {
 	
 	public Vector3f toVector3f() {
 		  return new Vector3f(x,y,z);
-		}
+		} 
+	//Write plus minus divide multiply todo
 	
 }

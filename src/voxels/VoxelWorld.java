@@ -18,6 +18,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.debug.Arrow;
 import com.jme3.scene.shape.Cylinder;
+import com.jme3.texture.Texture;
 import com.jme3.util.BufferUtils;
 
 /**
@@ -34,7 +35,12 @@ public class VoxelWorld extends SimpleApplication
     public void simpleInitApp() {
         materialLibrarian = new MaterialLibrarian(assetManager);
         setUpTheCam();
-        makeADemoMeshAndAdditToTheRootNode();
+        //
+        // JOSH: delete or comment out the next line.
+//        makeADemoMeshAndAdditToTheRootNode();
+        //REPLACE WITH a call to addTestBlockFace();
+        addTestBlockFace();
+        
     }
 
     /*
@@ -43,11 +49,23 @@ public class VoxelWorld extends SimpleApplication
     private void addTestBlockFace() {
         MeshSet mset = new MeshSet(); // 1
         Coord3 pos = new Coord3(0,0,0); // 2
-        BlockMeshUtil.AddFaceMeshData(pos, mset, Direction.XPOS, 0); // 3
+//        BlockMeshUtil.AddFaceMeshData(pos, mset, Direction.ZPOS, 0); // 3
+        int triIndexStart = 0;
+        for(int dir = 0; dir <= Direction.ZPOS; ++dir ){
+        	BlockMeshUtil.AddFaceMeshData(pos, mset, dir, triIndexStart); // 3
+        	triIndexStart += 4;
+        	
+        }
         Mesh testMesh = new Mesh(); // 4
         ApplyMeshSet(mset, testMesh); // 5
+        
+        //JOSH: you now have two geometries (which is a good thing for testing)
+        Geometry wireGeometry = new Geometry("test geom wire", testMesh); // 6
+        wireGeometry.setMaterial(materialLibrarian.getBlockMaterial()); // 7
+        rootNode.attachChild(wireGeometry); // 8
+        
         Geometry someGeometry = new Geometry("test geom", testMesh); // 6
-        someGeometry.setMaterial(materialLibrarian.getBlockMaterial()); // 7
+        someGeometry.setMaterial(materialLibrarian.getTexturedBlockMaterial()); // 7
         rootNode.attachChild(someGeometry); // 8
     }
     
@@ -116,6 +134,7 @@ public class VoxelWorld extends SimpleApplication
     public class MaterialLibrarian
     {
         private Material blockMaterial;
+        private Material texturedBlockMaterial;
         private AssetManager _assetManager;
 
         public MaterialLibrarian(AssetManager assetManager_) {
@@ -131,6 +150,17 @@ public class VoxelWorld extends SimpleApplication
                 blockMaterial = wireMaterial;
             }
             return blockMaterial;
+        }
+        //JOSH: GAVE YOU THIS MATERIAL METHOD
+        public Material getTexturedBlockMaterial() {
+            if (texturedBlockMaterial == null) {
+            	texturedBlockMaterial = new Material(assetManager, "MatDefs/BlockTex2.j3md");
+                Texture blockTex = assetManager.loadTexture("Textures/dog_64d_.jpg");
+                blockTex.setMagFilter(Texture.MagFilter.Nearest);
+                blockTex.setWrap(Texture.WrapMode.Repeat);
+                texturedBlockMaterial.setTexture("ColorMap", blockTex);
+            }
+            return texturedBlockMaterial;
         }
     }
 
